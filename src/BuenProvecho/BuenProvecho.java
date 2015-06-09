@@ -44,6 +44,7 @@ public class BuenProvecho {
 		Restaurante unRestaurante = new Restaurante();
 		Reserva miReserva = new Reserva();
 		
+		//comprobar si existe un usuario si no crearlo
 		if(existeUsuario(aTelefono))
 			unUsuario = buscarUsuario(aTelefono);
 		else{
@@ -51,8 +52,10 @@ public class BuenProvecho {
 			incluirUsuario(unUsuario);
 		}
 		
+		//buscar un restaurante
 		unRestaurante = buscarRestaurante(aTelefonoRestaurante);
 		
+		//crear la reserva y enlazarla con restaurante y usuario
 		unRestaurante.registrarReserva(unUsuario, fecha, aNumeroComensales);
 		miReserva.crear(unUsuario, unRestaurante, fecha, aNumeroComensales);
 		
@@ -118,6 +121,7 @@ public class BuenProvecho {
 		return fecha;
 	}
 	
+	//comprobar si existe un usuario
 	private boolean existeUsuario(String tlf){
 		
 		boolean existe = true;
@@ -140,7 +144,7 @@ public class BuenProvecho {
 		
 		return unRestaurante;
 	}
-	
+	//incluir un usuario en el array de usuarios
 	private void incluirUsuario(Usuario miusuario){
 		usuarios.add(miusuario);
 	}
