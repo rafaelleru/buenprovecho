@@ -18,11 +18,19 @@ public class Usuario {
 	}
 
 	boolean tienesReserva() {
-		throw new UnsupportedOperationException();
+		if(reservas.size() > 0)
+			return true;
+		else return false;
 	}
 
 	void anularReserva(String aCodReserva) {
-		throw new UnsupportedOperationException();
+		Reserva miReserva = new Reserva();
+		
+		miReserva = buscarReserva(aCodReserva);
+		
+		if(reservas.contains(miReserva) == true && miReserva.isConfirmed()){
+			miReserva.anularReserva();
+		}
 	}
 
 	void incluirReserva(Reserva aMiReserva) {
@@ -32,20 +40,22 @@ public class Usuario {
 			reservas.add(aMiReserva);
 	}
 
-	ArrayList consultarMisReservas() {
-		throw new UnsupportedOperationException();
+	public Vector<Reserva> consultarMisReservas() {
+		return reservas;
 	}
 
-	private Reserva buscarREserva(String aCodReserva) {
-		Reserva miReserva;
+	private Reserva buscarReserva(String aCodReserva) {
+		Reserva miReserva = new Reserva();
+		boolean esta = false;
 		
-		for(int i=0; i < reservas.size(); i++){
+		for(int i=0; i < reservas.size() && !esta; i++){
 			if(reservas.get(i).getCodigoReserva() == aCodReserva){
 				miReserva = reservas.get(i);
+				esta = true;
 			}
 		}
 		
-		throw new UnsupportedOperationException();
+		return miReserva;
 	}
 	
 	public String getTelefono(){
