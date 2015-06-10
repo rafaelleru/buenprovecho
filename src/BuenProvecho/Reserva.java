@@ -43,4 +43,12 @@ public class Reserva {
 	public String getCodigoReserva(){
 		return codReserva;
 	}
+	
+	public void anularReserva(){
+		confirmada = false;
+	}
+	
+	public boolean isConfirmed(){
+		return confirmada;
+	}
 }
