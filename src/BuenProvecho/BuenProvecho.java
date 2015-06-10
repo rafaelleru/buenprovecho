@@ -56,10 +56,9 @@ public class BuenProvecho {
 		unRestaurante = buscarRestaurante(aTelefonoRestaurante);
 		
 		//crear la reserva y enlazarla con restaurante y usuario
-		unRestaurante.registrarReserva(unUsuario, fecha, aNumeroComensales);
-		miReserva.crear(unUsuario, unRestaurante, fecha, aNumeroComensales);
+		unRestaurante.registrarReserva(unUsuario, fecha, aNumeroComensales);//essto incluye la reserva en el restaurante
+		miReserva.crear(unUsuario, unRestaurante, fecha, aNumeroComensales); 
 		
-		unRestaurante.incluirReserva(miReserva);
 		unUsuario.incluirReserva(miReserva);
 		
 		}

@@ -39,4 +39,8 @@ public class Reserva {
 	void confirmar() {
 		throw new UnsupportedOperationException();
 	}
+	
+	public String getCodigoReserva(){
+		return codReserva;
+	}
 }

@@ -11,8 +11,10 @@ public class Usuario {
 	public BuenProvecho _unnamed_BuenProvecho_;
 	public Vector<Reserva> reservas = new Vector<Reserva>();
 
-	void crear(String aNombreUSuario, String aCorreo, String aTelefono) {
-		throw new UnsupportedOperationException();
+	void crear(String aNombreUsuario, String aCorreo, String aTelefono) {
+		_nombre = aNombreUsuario;
+		_correo = aCorreo;
+		_telefono = aTelefono;
 	}
 
 	boolean tienesReserva() {
@@ -24,7 +26,10 @@ public class Usuario {
 	}
 
 	void incluirReserva(Reserva aMiReserva) {
-		throw new UnsupportedOperationException();
+		//si el objeto no esta en el vector de reservas lo incluimos para no introducir reservas duplicadas
+		
+		if(reservas.contains(aMiReserva) == false)
+			reservas.add(aMiReserva);
 	}
 
 	ArrayList consultarMisReservas() {
@@ -32,6 +37,14 @@ public class Usuario {
 	}
 
 	private Reserva buscarREserva(String aCodReserva) {
+		Reserva miReserva;
+		
+		for(int i=0; i < reservas.size(); i++){
+			if(reservas.get(i).getCodigoReserva() == aCodReserva){
+				miReserva = reservas.get(i);
+			}
+		}
+		
 		throw new UnsupportedOperationException();
 	}
 	
