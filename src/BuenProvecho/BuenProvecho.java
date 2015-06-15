@@ -2,6 +2,7 @@ package BuenProvecho;
 
 import java.util.GregorianCalendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.Scanner;
 
@@ -15,27 +16,53 @@ public class BuenProvecho {
 	public BuenProvecho _unnamed_BuenProvecho_;
 	public Vector<Usuario> _unnamed_Usuario_ = new Vector<Usuario>();
 	public Vector<Usuario> usuarios = new Vector<Usuario>();
-	public Vector<ResponsableRestaurante> _registra = new Vector<ResponsableRestaurante>();
+	public Vector<ResponsableRestaurante> responsables = new Vector<ResponsableRestaurante>();
 	public Vector<Restaurante> restaurantes = new Vector<Restaurante>();
+	private static BuenProvecho instance = new BuenProvecho();
+	
+	public static BuenProvecho getInstance(){
+		return instance;
+	}
 
-	public void solicitarRegistroRestaurante(String aNombreUsuario, String aNombre, String aProvincia, String aLocalidad, String aDireccion, String aTelefono) {
-		throw new UnsupportedOperationException();
+	public void solicitarRegistroRestaurante(String nombreUsuario, String nombre, String provincia, String localidad, String direccion, String telefono) {
+		Restaurante miRestaurante = new Restaurante();
+		miRestaurante.crear(nombre, provincia, localidad, direccion, telefono); 
+		ResponsableRestaurante unResponsable = buscarResponsable(nombreUsuario);
+        unResponsable.incluirRestaurante(miRestaurante);
+        miRestaurante.activarRestaurante();
+        restaurantes.add(miRestaurante);
 	}
 
 	public ArrayList obtenerRestaurantesPendientesAlta() {
-		throw new UnsupportedOperationException();
+		ArrayList<Restaurante> pendientes = new ArrayList();
+		
+		for(int i = 0; i < restaurantes.size(); i++){
+			if(restaurantes.get(i).pendienteAlta())
+				pendientes.add(restaurantes.get(i));
+		}
+		
+		return pendientes;
 	}
 
-	public void confirmarRegistroRestaurante(String[] aListaTElefonosRestaurantes) {
-		throw new UnsupportedOperationException();
-	}
+	public void confirmarRegistroRestaurante(String[] listaTelefonosRestaurantes) {
+		ArrayList<Restaurante> listaRestaurantes = new ArrayList();
+		listaRestaurantes = seleccionarRestaurantes(listaTelefonosRestaurantes);
+	        
+		for (int i = 0; i < listaRestaurantes.size();i++)
+	         listaRestaurantes.get(i).activarRestaurante();	}
 
-	public ArrayList anularReserva(String aCodREserva, String aTeledonoUsuario) {
-		throw new UnsupportedOperationException();
-	}
+    public void anularReserva(String codigoReserva, String nombreUsuario) {
+        Usuario unUsuario = buscarUsuario(nombreUsuario);
+        unUsuario.anularReserva(codigoReserva);
+       	boolean tieneReservas = unUsuario.tienesReserva();
+       	if(tieneReservas == false){
+       		usuarios.remove(unUsuario);
+        }
+    }
 
-	public ArrayList obtenermisRestaurantes(String aNombreUsuario) {
-		throw new UnsupportedOperationException();
+	public ArrayList<Restaurante> obtenermisRestaurantes(String nombreUsuario) {
+		ResponsableRestaurante responsable = buscarResponsable(nombreUsuario);
+		return responsable.obtenerMisRstaurantes();
 	}
 
 	public void solicitarReservaRestaurante(String aNombreUsuario, String aCorreo, String aTelefono, String aTelefonoRestaurante, GregorianCalendar fecha, int aNumeroComensales) {
@@ -63,24 +90,48 @@ public class BuenProvecho {
 		
 		}
 
-	public void confirmarReserva(String aCodigoReserva, String aTelefonoRestaurante) {
-		throw new UnsupportedOperationException();
+	public void confirmarReserva(String codigoReserva, String telefonoRestaurante) {
+		Restaurante restaurante = buscarRestaurante(telefonoRestaurante);
+		restaurante.confirmarReserva(codigoReserva);
 	}
 
-	public ArrayList consultarMisreservas(String aTelefonoUsuario) {
-		throw new UnsupportedOperationException();
+    public ArrayList<Reserva> consultarMisreservas(String telefonoUsuario) {
+    	Usuario unUsuario = buscarUsuario(telefonoUsuario);
+    	return unUsuario.consultarMisReservas();
 	}
 
 	public void eliminaReservasPasadasClientesNoHabituales() {
-		throw new UnsupportedOperationException();
+		
+		for(int i=0; i < usuarios.size(); i++){
+			usuarios.get(i).eliminarReservasPasadas();
+			
+			if(usuarios.get(i).tienesReserva())
+				usuarios.remove(usuarios.get(i));
+		}
 	}
 
-	public void alteRegistro(String aNombreUsuario, String aClave, String aCorreo, String aTipoUsuario) {
-		throw new UnsupportedOperationException();
+	public void alteRegistro(String aNombreUsuario, String aClave, String aCorreo) throws Exception {
+		boolean existe = existeResponsableRestaurante(aNombreUsuario);
+		
+		if (existe == false){
+            ResponsableRestaurante unUsuarioRegistrado = new ResponsableRestaurante();
+            unUsuarioRegistrado.crear(aNombreUsuario, aClave, aCorreo);
+            responsables.add(unUsuarioRegistrado);
+		}
+        else{
+            throw new Exception("Este usuario ya esta dado de alta");
+        }
 	}
 
 	private boolean existeResponsableRestaurante(String aNombreUsuario) {
-		throw new UnsupportedOperationException();
+		boolean esta = false;
+		
+		for(int i = 0; i < responsables.size() && !esta; i++){
+			if(responsables.get(i).getNombre() == aNombreUsuario)
+				esta = true;
+		}
+		
+		return esta;
 	}
 
 	public void actualizarDatosRestaurante(String aTelefono, String aNombre, String aNuevoTelefono, String aTipoCocina, float precioMedio, String descripcion, String aHorario) {
@@ -95,7 +146,7 @@ public class BuenProvecho {
 		throw new UnsupportedOperationException();
 	}
 
-	private Restaurante[] seleccionarRestaurantes(String[] aListaTelefonosRestaurantes) {
+	private ArrayList<Restaurante> seleccionarRestaurantes(String[] aListaTelefonosRestaurantes) {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -147,4 +198,15 @@ public class BuenProvecho {
 	private void incluirUsuario(Usuario miusuario){
 		usuarios.add(miusuario);
 	}
+
+	public ArrayList<String> verResponsables() {
+		ArrayList<String> responsable = new ArrayList<String>();
+		
+		for(int i = 0; i < responsables.size(); i++){
+			responsable.add(responsables.get(i).getNombre());
+		}
+		
+		return responsable;
+}
+	
 }

@@ -2,6 +2,7 @@ package BuenProvecho;
 
 import java.util.Vector;
 import java.util.ArrayList;
+
 import BuenProvecho.Reserva;
 
 public class Usuario {
@@ -9,7 +10,7 @@ public class Usuario {
 	private String _correo;
 	private String _telefono;
 	public BuenProvecho _unnamed_BuenProvecho_;
-	public Vector<Reserva> reservas = new Vector<Reserva>();
+	public ArrayList<Reserva> reservas = new ArrayList<Reserva>();
 
 	void crear(String aNombreUsuario, String aCorreo, String aTelefono) {
 		_nombre = aNombreUsuario;
@@ -40,7 +41,7 @@ public class Usuario {
 			reservas.add(aMiReserva);
 	}
 
-	public Vector<Reserva> consultarMisReservas() {
+	public ArrayList<Reserva> consultarMisReservas() {
 		return reservas;
 	}
 
@@ -60,5 +61,16 @@ public class Usuario {
 	
 	public String getTelefono(){
 		return _telefono;
+	}
+
+	public void eliminarReservasPasadas() {
+		for(int i = 0; i < reservas.size(); i++){
+			if(reservas.get(i).yaPasada())
+				reservas.remove(reservas.get(i));
+		}
+	}
+
+	public String getNombreUsuario() {
+		return _nombre;
 	}
 }

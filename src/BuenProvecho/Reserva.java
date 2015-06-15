@@ -1,5 +1,6 @@
 package BuenProvecho;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.ArrayList;
 
@@ -25,19 +26,36 @@ public class Reserva {
 	}
 
 	void eliminarDelRestaurante() {
-		throw new UnsupportedOperationException();
+		restaurante_.eliminarReserva(this);
 	}
 
-	ArrayList obrenerDatosReserva() {
-		throw new UnsupportedOperationException();
+	public ArrayList<String> obrenerDatosReserva() {
+		ArrayList<String> datos = new ArrayList<String>();
+		//datos.add("Comensales :");
+		datos.add(Integer.toString(numeroComensales));
+		//datos.add("Confirmada:");
+		if(confirmada)
+			datos.add("Si");
+		else datos.add("No");
+		//datos.add("Codigo Reserva: ");
+		datos.add(codReserva);
+		datos.add(usuario_.getNombreUsuario());
+		datos.add(restaurante_.getNombreRestaurante());
+		
+		return datos;
 	}
 
-	boolean yaPasada() {
-		throw new UnsupportedOperationException();
+	public boolean yaPasada() {
+		Calendar fechaactual = GregorianCalendar.getInstance(); //fecha actual del sistema
+		
+		if(fecha.after(fechaactual))
+			return true;
+		else return false;
+		
 	}
 
-	void confirmar() {
-		throw new UnsupportedOperationException();
+	public void confirmar() {
+		confirmada = true;
 	}
 	
 	public String getCodigoReserva(){

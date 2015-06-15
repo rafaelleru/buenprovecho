@@ -112,4 +112,8 @@ public class Restaurante {
 	public String getTelefono(){
 		return _telefono;
 	}
+
+	public String getNombreRestaurante() {
+		return _nombre;
+	}
 }
