@@ -2,7 +2,7 @@ package BuenProvecho;
 
 import java.util.GregorianCalendar;
 import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Scanner;
 
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 public class BuenProvecho {
 	public BuenProvecho _unnamed_BuenProvecho_;
-	public Vector<Usuario> _unnamed_Usuario_ = new Vector<Usuario>();
-	public Vector<Usuario> usuarios = new Vector<Usuario>();
-	public Vector<ResponsableRestaurante> responsables = new Vector<ResponsableRestaurante>();
-	public Vector<Restaurante> restaurantes = new Vector<Restaurante>();
+	public ArrayList<Usuario> _unnamed_Usuario_ = new ArrayList<Usuario>();
+	public ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+	public ArrayList<ResponsableRestaurante> responsables = new ArrayList<ResponsableRestaurante>();
+	public ArrayList<Restaurante> restaurantes = new ArrayList<Restaurante>();
 	private static BuenProvecho instance = new BuenProvecho();
 	
 	public static BuenProvecho getInstance(){
@@ -44,7 +44,7 @@ public class BuenProvecho {
 		return pendientes;
 	}
 
-	public void confirmarRegistroRestaurante(String[] listaTelefonosRestaurantes) {
+	public void confirmarRegistroRestaurante(ArrayList<String> listaTelefonosRestaurantes) {
 		ArrayList<Restaurante> listaRestaurantes = new ArrayList();
 		listaRestaurantes = seleccionarRestaurantes(listaTelefonosRestaurantes);
 	        
@@ -65,7 +65,7 @@ public class BuenProvecho {
 		return responsable.obtenerMisRstaurantes();
 	}
 
-	public void solicitarReservaRestaurante(String aNombreUsuario, String aCorreo, String aTelefono, String aTelefonoRestaurante, GregorianCalendar fecha, int aNumeroComensales) {
+	public String solicitarReservaRestaurante(String aNombreUsuario, String aCorreo, String aTelefono, String aTelefonoRestaurante, GregorianCalendar fecha, int aNumeroComensales) {
 		
 		Usuario unUsuario = new Usuario();
 		Restaurante unRestaurante = new Restaurante();
@@ -87,6 +87,8 @@ public class BuenProvecho {
 		miReserva.crear(unUsuario, unRestaurante, fecha, aNumeroComensales); 
 		
 		unUsuario.incluirReserva(miReserva);
+                
+                return miReserva.getCodigoReserva();
 		
 		}
 
@@ -95,9 +97,9 @@ public class BuenProvecho {
 		restaurante.confirmarReserva(codigoReserva);
 	}
 
-    public ArrayList<Reserva> consultarMisreservas(String telefonoUsuario) {
-    	Usuario unUsuario = buscarUsuario(telefonoUsuario);
-    	return unUsuario.consultarMisReservas();
+        public ArrayList<Reserva> consultarMisreservas(String telefonoUsuario) {
+        	Usuario unUsuario = buscarUsuario(telefonoUsuario);
+            return unUsuario.consultarMisReservas();
 	}
 
 	public void eliminaReservasPasadasClientesNoHabituales() {
@@ -135,25 +137,52 @@ public class BuenProvecho {
 	}
 
 	public void actualizarDatosRestaurante(String aTelefono, String aNombre, String aNuevoTelefono, String aTipoCocina, float precioMedio, String descripcion, String aHorario) {
-		throw new UnsupportedOperationException();
-	}
+            Restaurante unRestaurante = buscarRestaurante(aTelefono);            
+            unRestaurante.actualizarRestaurante(aTipoCocina, precioMedio, descripcion, aHorario);
+            }
 
 	private ResponsableRestaurante buscarResponsable(String aNombreUsuario) {
-		throw new UnsupportedOperationException();
-	}
+            boolean encontrado = false;
+            int i = 0;
+                    
+            for(i=0 ; i < responsables.size() && encontrado == false; i++){
+                if(responsables.get(i).getNombre() == aNombreUsuario)
+                    encontrado = true;
+            }
+            return responsables.get(i);
+
+            
+        }
 
 	private Usuario buscarUsuario(String aTelefonoUsuario) {
-		throw new UnsupportedOperationException();
-	}
+            boolean encontrado = false;
+            int i;
+            
+            for(i=0; i < usuarios.size() && encontrado == false; i++){
+                if(usuarios.get(i).getTelefono() == aTelefonoUsuario)
+                    encontrado = true;
+         }
+            
+            return usuarios.get(i);
+        }
 
-	private ArrayList<Restaurante> seleccionarRestaurantes(String[] aListaTelefonosRestaurantes) {
-		throw new UnsupportedOperationException();
+	public ArrayList<Restaurante> seleccionarRestaurantes(ArrayList<String> aListaTelefonosRestaurantes) {
+		ArrayList<Restaurante> seleccionados = new ArrayList<Restaurante>();
+                
+                for(int j = 0; j < aListaTelefonosRestaurantes.size(); j++){
+                    for(int i = 0; i < restaurantes.size(); i++){
+                        if(restaurantes.get(i).getTelefono() == aListaTelefonosRestaurantes.get(j))
+                            seleccionados.add(restaurantes.get(i));
+                    }
+                }
+                
+                return seleccionados;
 	}
 	
 	/*
 	 * Metodo privado para encapsular la recogida de la fecha para las reservas
 	 * */
-	private GregorianCalendar getFecha(){
+	public GregorianCalendar getFecha(){
 		Scanner sc = new Scanner(System.in);
 		
 		// cogemos la fecha desde teclado

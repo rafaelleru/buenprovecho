@@ -3,6 +3,7 @@ package BuenProvecho;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Reserva {
 	private GregorianCalendar fecha;
@@ -15,9 +16,14 @@ public class Reserva {
 	void crear(Usuario aUnUsuario, Restaurante aUnRestaurante, GregorianCalendar aFecha, int aNumeroComensales) {
 		numeroComensales = aNumeroComensales;
 		confirmada = false; //por defecto la reserva no estara confirmada
-		/*
-		 * Implementar el sistema para adignar un codigo a la nueva reserva 
-		 */
+		
+                //Codigo de reserva
+                Random aleatorio = new Random();
+                int cod = aleatorio.nextInt()*10000+1000; //el codigo de la reserva sera un numero entre 1000 y 10000
+                
+                codReserva = Integer.toString(cod);
+                
+                
 		usuario_ = aUnUsuario;
 		restaurante_ = aUnRestaurante;
 		fecha = aFecha;
